@@ -63,19 +63,19 @@
             }
             this._loadingDiv = document.createElement("div");
             this._loadingDiv.id = "customLoadingScreenDiv";
-            this._loadingDiv.innerHTML = "scene is currently loading..."+
+            this._loadingDiv.innerHTML = "Scene is currently loading..."+
             '<p id="div0">100<p>';
             var customLoadingScreenCss = document.createElement('style');
             customLoadingScreenCss.type = 'text/css';
             customLoadingScreenCss.innerHTML = `
             #customLoadingScreenDiv{
-                background-color: #BB464Bcc;
-                color: white;
+                background-color: #38FBFB;
+                color: black;
                 font-size:50px;
                 text-align:center;
             }
              #customLoadingScreenDiv p{
-                background-color: #BB464Bcc;
+                background-color: #e3ee00cc;
                 color: white;
                 font-size:50px;
                 text-align:center;
@@ -123,7 +123,7 @@
                 // assuming "loadingScreenPercent" is an existing html element
                 
         
-        $('#div0').html('%'+loadedPercent);
+        $('#div0').html( loadedPercent+'%');
         
         
                 //document.getElementById("loadingScreenPercent").innerHTML = loadedPercent;

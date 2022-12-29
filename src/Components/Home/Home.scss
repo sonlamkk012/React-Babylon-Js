@@ -58,10 +58,12 @@
       border: none;
       background: linear-gradient(
         90deg,
-        #c7a0ca 4.55%,
-        #5e68b3 51.78%,
-        #61c2ee 100%
+        rgba(56, 251, 252, 0.711922268907563) 25%,
+        rgba(101, 253, 29, 0.7399334733893557) 50%,
+        rgba(56, 251, 252, 1) 75%,
+        rgba(101, 253, 29, 0.7455357142857143) 100%
       );
+
       border-radius: 36px;
 
       .btn-home::after {
@@ -91,13 +93,13 @@
       position: relative;
       width: 180px;
       height: 48px;
-      font-weight: 400;
+      font-weight: 700;
       border: none;
       font-size: 18px;
       line-height: 22px;
       border-radius: 30px;
       text-transform: uppercase;
-      color: #fff;
+      color: black;
     }
 
     .btn-enter-app::before {
@@ -108,7 +110,7 @@
       bottom: -4px;
       position: absolute;
       border-radius: 30px;
-      border: 2px solid #c7a0caba;
+      border: 2px solid #38fbfc;
       -webkit-animation: bounce 1.5s infinite;
       animation: bounce 1.5s infinite;
     }
