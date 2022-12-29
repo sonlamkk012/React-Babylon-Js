@@ -1,15 +1,12 @@
+import "./BabylonFireBall.scss";
 
-
-import "./Babylon.scss"
-
-
-const Babylon = () => {
+const BabylonFireBall = () => {
   return (
-    <div id="babylon">
+    <div id="babylon-fire-ball">
       <div className="container">
         <div className="title">
           <h2>
-            <span>Solar</span>
+            <span>Fire Ball</span>
           </h2>
           <h3>
             <span>Babylon Js</span>
@@ -21,14 +18,15 @@ const Babylon = () => {
             scroll="no"
             width="100%"
             height="800"
-            src="static/demo-babylon-react.html"
+            src="static/FireBall/demo-babylon.html"
             frameborder="0"
             allowtransparency="true"
-            style={{borderRadius:"20px"}}
+            style={{ borderRadius: "20px" }}
           ></iframe>
         </div>
       </div>
     </div>
   );
 };
-export default Babylon;
+
+export default BabylonFireBall;

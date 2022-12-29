@@ -1,15 +1,13 @@
+import { def } from "@vue/shared";
+import "./BabylonFish.scss";
 
-
-import "./Babylon.scss"
-
-
-const Babylon = () => {
+const BabylonFish = () => {
   return (
-    <div id="babylon">
+    <div id="babylon-fish">
       <div className="container">
         <div className="title">
           <h2>
-            <span>Solar</span>
+            <span>Fish</span>
           </h2>
           <h3>
             <span>Babylon Js</span>
@@ -21,14 +19,15 @@ const Babylon = () => {
             scroll="no"
             width="100%"
             height="800"
-            src="static/demo-babylon-react.html"
+            src="static/Fish/babylon-fish.html"
             frameborder="0"
             allowtransparency="true"
-            style={{borderRadius:"20px"}}
+            style={{ borderRadius: "20px" }}
           ></iframe>
         </div>
       </div>
     </div>
   );
 };
-export default Babylon;
+
+export default BabylonFish

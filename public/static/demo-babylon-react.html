@@ -1,42 +1,46 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-        <title>Babylon.js sample code</title>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-        <!-- Babylon.js -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
-        <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
-        <script src="https://preview.babylonjs.com/ammo.js"></script>
-        <script src="https://preview.babylonjs.com/cannon.js"></script>
-        <script src="https://preview.babylonjs.com/Oimo.js"></script>
-        <script src="https://preview.babylonjs.com/earcut.min.js"></script>
-        <script src="https://preview.babylonjs.com/babylon.js"></script>
-        <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
-        <script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
-        <script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
-        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
-        <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
-        <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
-        <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+    <title>Babylon.js sample code</title>
 
-        <style>
-            html, body {
-                overflow: hidden;
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }
+    <!-- Babylon.js -->
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+    <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+    <script src="https://preview.babylonjs.com/ammo.js"></script>
+    <script src="https://preview.babylonjs.com/cannon.js"></script>
+    <script src="https://preview.babylonjs.com/Oimo.js"></script>
+    <script src="https://preview.babylonjs.com/earcut.min.js"></script>
+    <script src="https://preview.babylonjs.com/babylon.js"></script>
+    <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+    <script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+    <script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+    <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+    <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+    <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
 
-            #renderCanvas {
-                width: 100%;
-                height: 100%;
-                touch-action: none;
-            }
-        </style>
-    </head>
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+</head>
+
 <body>
     <canvas id="renderCanvas"></canvas>
     <script>
@@ -53,115 +57,182 @@
         var engine = null;
         var scene = null;
         var sceneToRender = null;
-        var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
-        var currentGroup;
+        var createDefaultEngine = function () { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false }); };
+
+        BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
+            if (document.getElementById("customLoadingScreenDiv")) {
+                // Do not add a loading screen if there is already one
+                document.getElementById("customLoadingScreenDiv").style.display = "initial";
+                return;
+            }
+            this._loadingDiv = document.createElement("div");
+            this._loadingDiv.id = "customLoadingScreenDiv";
+            this._loadingDiv.innerHTML = "scene is currently loading..."+
+            '<p id="div0">100<p>';
+            var customLoadingScreenCss = document.createElement('style');
+            customLoadingScreenCss.type = 'text/css';
+            customLoadingScreenCss.innerHTML = `
+            #customLoadingScreenDiv{
+                background-color: #BB464Bcc;
+                color: white;
+                font-size:50px;
+                text-align:center;
+            }
+             #customLoadingScreenDiv p{
+                background-color: #BB464Bcc;
+                color: white;
+                font-size:50px;
+                text-align:center;
+            }
+            `;
+            document.getElementsByTagName('head')[0].appendChild(customLoadingScreenCss);
+            this._resizeLoadingUI();
+            window.addEventListener("resize", this._resizeLoadingUI);
+            document.body.appendChild(this._loadingDiv);
+        };
         
-        var createButton = function(group, panel) {
-        	var button = BABYLON.GUI.Button.CreateSimpleButton("button", group.name);
-        	button.paddingTop = "10px";
-        	button.width = "120px";
-        	button.height = "50px";
-        	button.color = "white";
-        	button.background = "#0088FF";
-        	button.onPointerDownObservable.add(function() {
-        		if (currentGroup) {
-        			currentGroup.stop();
-        		}
-        		group.start(true);
-        		currentGroup = group;
-        	});
-        	panel.addControl(button);  
+        BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
+            document.getElementById("customLoadingScreenDiv").style.display = "none";
+            console.log("scene is now loaded");
         }
-        
+
+        var currentGroup;
+
+        var createButton = function (group, panel) {
+            var button = BABYLON.GUI.Button.CreateSimpleButton("button");
+            button.class= "test";
+            button.paddingTop = "10px";
+            button.width = "100px";
+            button.height = "50px";
+            button.color = "#38fbfc";
+            button.background = "#38fbfc";
+            button.onPointerDownObservable.add(function () {
+                if (currentGroup) {
+                    currentGroup.stop();
+                }
+                group.start(true);
+                currentGroup = group;
+            });
+            panel.addControl(button);
+        }
+
         var delayCreateScene = function () {
-        
+
             engine.enableOfflineSupport = false;
-        
+
             engine.setHardwareScalingLevel(0.5);
-            
+
             // This is really important to tell Babylon.js to use decomposeLerp and matrix interpolation
             BABYLON.Animation.AllowMatricesInterpolation = true;
-        
+
             var scene = new BABYLON.Scene(engine);
-        
+
             engine.displayLoadingUI();
-        
-        	BABYLON.SceneLoader.ImportMesh("", "https://models.babylonjs.com/", "solar_system.glb", scene, function (newMeshes, particleSystems, skeletons) {
-        		scene.createDefaultCameraOrLight(true, true, true);
-                scene.activeCamera.setTarget(BABYLON.Vector3.Zero());
-                scene.activeCamera.beta = Math.PI / 3;
-                scene.activeCamera.alpha = 0.8 * Math.PI;
-                scene.activeCamera.lowerRadiusLimit = 3.0;
-        		scene.activeCamera.upperRadiusLimit = 15.0;
-        
-                for (var index = 0; index < newMeshes.length; index++) {
-                    newMeshes[index].alwaysSelectAsActiveMesh = true;
-                }
-        
-                var nebula = new BABYLON.CubeTexture("https://www.babylonjs.com/assets/skybox/nebula", scene);
-                nebula.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-        
-                var helper = scene.createDefaultEnvironment({
-                    createGround: false,
-                    skyboxTexture: nebula,
-                });
-                helper.skyboxMaterial.useRGBColor = true;
-        
-        		scene.stopAllAnimations();
-        
-        		// Enable animation blending for all animations
-                scene.animationPropertiesOverride = new BABYLON.AnimationPropertiesOverride();
-                scene.animationPropertiesOverride.enableBlending = true;
-                scene.animationPropertiesOverride.blendingSpeed = 0.02;
-                scene.animationPropertiesOverride.loopMode = 1;
-        
-                // UI
-                var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-                advancedTexture.renderScale = 0.5;
-                var UiPanel = new BABYLON.GUI.StackPanel();
-                UiPanel.width = "220px";
-                UiPanel.fontSize = "14px";
-                UiPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-                UiPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-        		advancedTexture.addControl(UiPanel);
-        		
-        		// Animation groups
-        		for (var index = 0; index < scene.animationGroups.length; index++) {
-        			var group = scene.animationGroups[index];
-        			// Create a button per group
-        			createButton(group, UiPanel);
-        		}
-        
-        		scene.animationGroups[0].start(true);  
-        		currentGroup = scene.animationGroups[0];
-        
-                // A bit of glow :)
-                var gl = new BABYLON.GlowLayer("glow", scene, {
-                    mainTextureFixedSize: 512
-                });        
-        
-                engine.hideLoadingUI();
-            });	
-        
-            return scene;
-        };
-                window.initFunction = async function() {
-                    
-                    
-                    var asyncEngineCreation = async function() {
-                        try {
-                        return createDefaultEngine();
-                        } catch(e) {
-                        console.log("the available createEngine function failed. Creating the default engine instead");
-                        return createDefaultEngine();
-                        }
+
+            BABYLON.SceneLoader.ImportMesh(
+                "",
+                "https://models.babylonjs.com/",
+                "solar_system.glb",
+                scene,
+                function (newMeshes, particleSystems, skeletons) {
+                    scene.createDefaultCameraOrLight(true, true, true);
+                    scene.activeCamera.setTarget(BABYLON.Vector3.Zero());
+                    scene.activeCamera.beta = Math.PI / 3;
+                    scene.activeCamera.alpha = 0.8 * Math.PI;
+                    scene.activeCamera.lowerRadiusLimit = 3.0;
+                    scene.activeCamera.upperRadiusLimit = 15.0;
+
+                    for (var index = 0; index < newMeshes.length; index++) {
+                        newMeshes[index].alwaysSelectAsActiveMesh = true;
                     }
 
-                    window.engine = await asyncEngineCreation();
-        if (!engine) throw 'engine should not be null.';
-        startRenderLoop(engine, canvas);
-        window.scene = delayCreateScene();};
-        initFunction().then(() => {sceneToRender = scene                    
+                    var nebula = new BABYLON.CubeTexture("https://www.babylonjs.com/assets/skybox/nebula", scene);
+                    nebula.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+
+                    var helper = scene.createDefaultEnvironment({
+                        createGround: false,
+                        skyboxTexture: nebula,
+                    });
+                    helper.skyboxMaterial.useRGBColor = true;
+
+                    scene.stopAllAnimations();
+
+                    // Enable animation blending for all animations
+                    scene.animationPropertiesOverride = new BABYLON.AnimationPropertiesOverride();
+                    scene.animationPropertiesOverride.enableBlending = true;
+                    scene.animationPropertiesOverride.blendingSpeed = 0.02;
+                    scene.animationPropertiesOverride.loopMode = 1;
+
+                    // UI
+                    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+                    advancedTexture.renderScale = 0.5;
+                    var UiPanel = new BABYLON.GUI.StackPanel();
+                    UiPanel.width = "220px";
+                    UiPanel.fontSize = "14px";
+                    UiPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+                    UiPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+                    advancedTexture.addControl(UiPanel);
+
+                    // Animation groups
+                    for (var index = 0; index < scene.animationGroups.length; index++) {
+                        var group = scene.animationGroups[index];
+                        // Create a button per group
+                        createButton(group, UiPanel);
+                    }
+
+                    scene.animationGroups[0].start(true);
+                    currentGroup = scene.animationGroups[0];
+
+                    // A bit of glow :)
+                    var gl = new BABYLON.GlowLayer("glow", scene, {
+                        mainTextureFixedSize: 512
+                    });
+
+                    engine.hideLoadingUI();
+                },
+                function (evt) {
+                    // alert("ali");
+                    // onProgress
+                    var loadedPercent = 0;
+                    if (evt.lengthComputable) {
+                        loadedPercent = (evt.loaded * 100 / evt.total).toFixed();
+                    } else {
+                        var dlCount = evt.loaded / (1024 * 1024);
+                        loadedPercent = Math.floor(dlCount * 100.0) / 100.0;
+                    }
+                    console.log("dsada",loadedPercent);
+                    //alert(loadedPercent);
+                    // assuming "loadingScreenPercent" is an existing html element
+
+                    $('#div0').html('%'+loadedPercent);
+
+
+                    //document.getElementById("loadingScreenPercent").innerHTML = loadedPercent;
+                    // console.log("scene is now loaded: %"+loadedPercent);
+                }
+            );
+
+                    return scene;
+                };
+        window.initFunction = async function () {
+
+
+            var asyncEngineCreation = async function () {
+                try {
+                    return createDefaultEngine();
+                } catch (e) {
+                    console.log("the available createEngine function failed. Creating the default engine instead");
+                    return createDefaultEngine();
+                }
+            }
+
+            window.engine = await asyncEngineCreation();
+            if (!engine) throw 'engine should not be null.';
+            startRenderLoop(engine, canvas);
+            window.scene = delayCreateScene();
+        };
+        initFunction().then(() => {
+            sceneToRender = scene
         });
 
         // Resize
@@ -170,4 +241,5 @@
         });
     </script>
 </body>
+
 </html>
