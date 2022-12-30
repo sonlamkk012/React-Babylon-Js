@@ -1,4 +1,3 @@
-import { def } from "@vue/shared";
 import "./BabylonFish.scss";
 
 const BabylonFish = () => {
