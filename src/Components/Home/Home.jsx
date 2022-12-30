@@ -45,6 +45,13 @@ const goToSolar = () => {
   },1500)
 }
 
+const goToUFO = () => {
+  enterLoading(3);
+setTimeout(() => {
+    navigate('/ufo')
+},1500)
+}
+
   return (
     <div id="home">
       <div className="container">
@@ -80,6 +87,14 @@ const goToSolar = () => {
             onClick={goToSolar}
           >
             Solar
+          </Button>
+          <Button
+            className="btn-home btn-enter-app animate-scale"
+            type="primary"
+            loading={loadings[3]}
+            onClick={goToUFO}
+          >
+            UFO
           </Button>
         </div>
       </div>
