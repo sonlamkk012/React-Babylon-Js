@@ -1,7 +1,6 @@
-
-
-import "./Babylon.scss"
-
+import { DoubleLeftOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import "./Babylon.scss";
 
 const Babylon = () => {
   return (
@@ -15,18 +14,24 @@ const Babylon = () => {
             <span>Babylon Js</span>
           </h3>
         </div>
-        <div>
-          <iframe
-            id="iframeAR"
-            scroll="no"
-            width="100%"
-            height="800"
-            src="static/demo-babylon-react.html"
-            frameborder="0"
-            allowtransparency="true"
-            style={{borderRadius:"20px"}}
-          ></iframe>
+        <div className="button">
+          <Link to="/">
+            <button className="btn-home btn-enter-app">
+              <DoubleLeftOutlined />
+              <span>Home</span>
+            </button>
+          </Link>
         </div>
+        <iframe
+          id="iframeAR"
+          scroll="no"
+          width="100%"
+          height="800"
+          src="static/demo-babylon-react.html"
+          frameborder="0"
+          allowtransparency="true"
+          style={{ borderRadius: "20px" }}
+        ></iframe>
       </div>
     </div>
   );

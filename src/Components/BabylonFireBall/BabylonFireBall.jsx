@@ -1,3 +1,5 @@
+import { DoubleLeftOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 import "./BabylonFireBall.scss";
 
 const BabylonFireBall = () => {
@@ -13,6 +15,14 @@ const BabylonFireBall = () => {
           </h3>
         </div>
         <div>
+        <div className="button">
+            <Link to="/">
+              <button className="btn-home btn-enter-app">
+                <DoubleLeftOutlined />
+                <span>Home</span>
+              </button>
+            </Link>
+          </div>
           <iframe
             id="iframeAR"
             scroll="no"
