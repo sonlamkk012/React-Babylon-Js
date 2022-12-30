@@ -35,4 +35,49 @@
       -webkit-text-fill-color: transparent;
     }
   }
+  .button {
+    display: flex;
+    a {
+      text-decoration: none;
+    }
+    .btn-home {
+      margin-bottom: 20px;
+      align-items: center;
+      border-radius: 20px;
+      width: 150px;
+      height: 50px;
+      position: relative;
+      border: none;
+      background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+      border-radius: 36px;
+
+      .btn-home::after {
+        content: "";
+        position: absolute;
+        border-radius: 36px;
+        top: 0;
+        left: 0;
+        width: 0%;
+        opacity: 0.2;
+      }
+    }
+
+    .btn-enter-app {
+      display: flex;
+      align-items: center;
+      position: relative;
+      width: 180px;
+      height: 48px;
+      font-weight: 700;
+      border: none;
+      font-size: 18px;
+      line-height: 22px;
+      border-radius: 30px;
+      text-transform: uppercase;
+      color: black;
+    }
+    span {
+      margin-left: 20px;
+    }
+  }
 }
